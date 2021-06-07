@@ -786,7 +786,13 @@ class _dis extends State<dis> {
                 child: Row(
                   children: <Widget>[
                     RaisedButton(
-                        onPressed: null,
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => _edits(),
+                              ));
+                        },
                         color: Colors.white,
                         child: Text("Edit",
                             style: TextStyle(color: Colors.black))),
