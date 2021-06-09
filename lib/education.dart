@@ -75,7 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
               s1 = "";
               s1 = s1 + ed[0] + ed[1] + ed[2] + ed[3];
               s1 = widget.text + s1 + "#";
-
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -261,7 +260,7 @@ class _MyDetailPageState extends State<MyDetailPage> {
         ),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: SingleChildScrollView(child:Column(
             children: <Widget>[
               SizedBox(height: 100),
               Center(
@@ -375,24 +374,10 @@ class _MyDetailPageState extends State<MyDetailPage> {
                   ),
                 ),
               ),
+              SizedBox(height:MediaQuery.of(context).size.height/1),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ed extends StatelessWidget {
-  final String text;
-
-  const _ed({Key key, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Text(text),
+        ),),
       ),
     );
   }

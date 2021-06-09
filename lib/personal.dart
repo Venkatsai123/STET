@@ -165,8 +165,7 @@ class _personal extends State<Personal> {
                   em.text +
                   "#";
               Navigator.pop(context, "$s");
-            } 
-            else {
+            } else {
               if (valuefirst) {
                 Navigator.push(
                     context,
@@ -799,53 +798,55 @@ class _personal extends State<Personal> {
                       padding: const EdgeInsets.all(10.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => _document(),
-                                    ));
-                                if (c == 4) {
-                                  setState(() {
-                                    _value = !_value;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                "Documents to be Uploaded",
-                                style: (TextStyle(
-                                    fontSize: 20, color: Colors.white)),
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Visibility(
-                              child: Icon(Icons.check_box_rounded),
-                              visible: _value,
-                            ),
-                            SizedBox(width: 25),
-                            RaisedButton(
-                                onPressed: () {
+                        child: SingleChildScrollView(
+                          child: Row(
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => _document(),
                                       ));
-                                  if (c != 4) {
+                                  if (c == 4) {
                                     setState(() {
                                       _value = !_value;
                                     });
                                   }
                                 },
-                                child: Text("Click Here"))
-                          ],
+                                child: Text(
+                                  "Documents to be Uploaded",
+                                  style: (TextStyle(
+                                      fontSize: 20, color: Colors.white)),
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                              Visibility(
+                                child: Icon(Icons.check_box_rounded),
+                                visible: _value,
+                              ),
+                              SizedBox(width: 15),
+                              RaisedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => _document(),
+                                        ));
+                                    if (c != 4) {
+                                      setState(() {
+                                        _value = !_value;
+                                      });
+                                    }
+                                  },
+                                  child: Text("Click Here"))
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Row(
                         children: <Widget>[
                           Checkbox(
@@ -858,9 +859,12 @@ class _personal extends State<Personal> {
                               });
                             },
                           ),
-                          Text(
-                            "I hereby decalre the information given by me are correct",
-                            style: TextStyle(fontSize: 15),
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              "I hereby decalre the information given by me are correct",
+                              style: TextStyle(fontSize: 13),
+                            ),
                           )
                         ],
                       ),

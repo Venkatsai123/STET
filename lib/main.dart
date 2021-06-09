@@ -67,7 +67,7 @@ class login_screen extends StatefulWidget {
 }
 
 class login_screenstate extends State<login_screen> {
-  List<Color> colors = [Color(0xFFf4f1de), Color(0xFF14213d)];
+  List<Color> colors = [Colors.cyan[600], Colors.black26];
   int _index = 0;
   @override
   Widget build(BuildContext context) {
@@ -248,6 +248,7 @@ class login_screenstate extends State<login_screen> {
                             ),
                             Divider(color: Colors.grey, height: 8),
                             TextField(
+                              obscureText: true,
                               decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.lock,
@@ -264,19 +265,21 @@ class login_screenstate extends State<login_screen> {
                             ),
                             Divider(color: Colors.grey, height: 8),
                             TextField(
+                              obscureText: true,
                               decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.lock,
-                                    color: Colors.grey,
-                                  ),
-                                  labelText: "Re - Enter Password",
-                                  labelStyle: TextStyle(color: Colors.black87),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent))),
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.grey,
+                                ),
+                                labelText: "Re - Enter Password",
+                                labelStyle: TextStyle(color: Colors.black87),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent)),
+                              ),
                             ),
                             Divider(
                               color: Colors.transparent,
@@ -292,28 +295,36 @@ class login_screenstate extends State<login_screen> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       select_screen()));
                         },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width - 100,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: colors,
-                              ),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            child: Center(
-                                child: Text(
-                              "SIGNUP",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            )),
+                        child: Expanded(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width - 100,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: colors,
+                                ),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Center(
+                                  child: Text(
+                                "SIGNUP",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              )),
+                            ),
                           ),
                         ),
                       ),
@@ -415,7 +426,11 @@ class _select_screenstate extends State<select_screen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => login_screen(),
+                ));
           },
         ),
         title: Center(
@@ -608,6 +623,7 @@ class _CategoriesScreen extends State<CategoriesScreen> {
           label: const Text("Next"),
         ),
       ),
+    
       body: GridView.count(
         padding: const EdgeInsets.all(12),
         crossAxisCount: 2,
@@ -621,7 +637,7 @@ class _CategoriesScreen extends State<CategoriesScreen> {
         crossAxisSpacing: 20,
         mainAxisSpacing: 25,
       ),
-    );
+      );
   }
 }
 
@@ -691,7 +707,11 @@ class _dis extends State<dis> {
         leading: IconButton(
           icon: Icon(Icons.logout, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => login_screen(),
+                ));
           },
         ),
       ),
@@ -708,6 +728,7 @@ class _dis extends State<dis> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              SizedBox(height:20),
               Align(
                 alignment: Alignment.center,
                 child: Image.asset(
@@ -800,6 +821,7 @@ class _dis extends State<dis> {
                   ],
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height / 1),
             ],
           ),
         ),

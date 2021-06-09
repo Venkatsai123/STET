@@ -11,11 +11,7 @@ class DetailsPage extends StatefulWidget {
 
 List l;
 int c = 0;
-
-class _DetailsPage extends State<DetailsPage> {
-  @override
-  String s3 = "";
-  List l1 = [
+List l1 = [
     "First Name",
     "Middle Name",
     "Sur Name",
@@ -44,6 +40,11 @@ class _DetailsPage extends State<DetailsPage> {
     "Post Graduation Passing Year",
   ];
 
+
+class _DetailsPage extends State<DetailsPage> {
+  @override
+  String s3 = "";
+  
   String s = "hello";
   Widget build(BuildContext context) {
     setState(() {
