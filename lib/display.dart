@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'main.dart';
 import 'personal.dart';
 import 'education.dart';
@@ -12,39 +15,38 @@ class DetailsPage extends StatefulWidget {
 List l;
 int c = 0;
 List l1 = [
-    "First Name",
-    "Middle Name",
-    "Sur Name",
-    "Gender",
-    "Caste",
-    "Aadhar Number",
-    "Date of Birth",
-    "Father Name",
-    "Mother Name",
-    "Address",
-    "Mobile Number",
-    "EMail",
-    "Role",
-    "Subject",
-    "Name of the School",
-    "Xth Percentage",
-    "Xth Passing Year",
-    "Name of the College",
-    "XIIth Percentage",
-    "XIIth Passing Year",
-    "Name of the College/University",
-    "Graduation Percentage",
-    "Graduation Passing Year",
-    "Name of the College/University",
-    "Post Graduation Percentage",
-    "Post Graduation Passing Year",
-  ];
-
+  "First Name",
+  "Middle Name",
+  "Sur Name",
+  "Gender",
+  "Caste",
+  "Aadhar Number",
+  "Date of Birth",
+  "Father Name",
+  "Mother Name",
+  "Address",
+  "Mobile Number",
+  "EMail",
+  "Role",
+  "Subject",
+  "Name of the School",
+  "Xth Percentage",
+  "Xth Passing Year",
+  "Name of the College",
+  "XIIth Percentage",
+  "XIIth Passing Year",
+  "Name of the College/University",
+  "Graduation Percentage",
+  "Graduation Passing Year",
+  "Name of the College/University",
+  "Post Graduation Percentage",
+  "Post Graduation Passing Year",
+];
 
 class _DetailsPage extends State<DetailsPage> {
   @override
   String s3 = "";
-  
+
   String s = "hello";
   Widget build(BuildContext context) {
     setState(() {
@@ -571,6 +573,62 @@ class _submit extends StatefulWidget {
 }
 
 class submit extends State<_submit> {
+  bool _value = false;
+  static const platform = const MethodChannel("razorpay_flutter");
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout() async {
+    var options = {
+      'key': 'rzp_test_5Bj5mq7OeZif36',
+      'amount': 2000 * 10,
+      'name': 'STET Exam Fee',
+      'description': 'Exam Registration Fee',
+      'prefill': {'contact': l[10], 'email': l[11]},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    setState(() {
+      _value = !_value;
+    });
+    Fluttertoast.showToast(
+        msg: "SUCCESS: " + response.paymentId, toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "ERROR: " + response.code.toString() + " - " + response.message,
+        toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET: " + response.walletName,
+        toastLength: Toast.LENGTH_SHORT);
+  }
+
+  Razorpay _razorpay;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -581,10 +639,10 @@ class submit extends State<_submit> {
           icon: Icon(Icons.logout, color: Colors.white),
           onPressed: () {
             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => login_screen(),
-                              ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => login_screen(),
+                ));
           },
         ),
       ),
@@ -601,6 +659,7 @@ class submit extends State<_submit> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              SizedBox(height: 50),
               Align(
                 alignment: Alignment.center,
                 child: Image.asset(
@@ -696,7 +755,7 @@ class submit extends State<_submit> {
                 padding: const EdgeInsets.all(30.0),
                 child: Row(
                   children: <Widget>[
-                    RaisedButton(
+                    OutlineButton(
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -708,9 +767,27 @@ class submit extends State<_submit> {
                         child: Text("Edit",
                             style: TextStyle(color: Colors.black))),
                     SizedBox(width: 30),
+                    OutlineButton(
+                        onPressed: () {
+                          openCheckout();
+                          if (c == 1) {
+                            setState(() {
+                              _value = !_value;
+                            });
+                          }
+                        },
+                        color: Colors.white,
+                        child: Text("Payment Status",
+                            style: TextStyle(color: Colors.black))),
+                    SizedBox(width: 5),
+                    Visibility(
+                      child: Icon(Icons.check_box_rounded),
+                      visible: _value,
+                    ),
                   ],
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height / 1),
             ],
           ),
         ),
