@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'main.dart';
 import 'personal.dart';
 import 'education.dart';
@@ -584,6 +587,62 @@ class _submit extends StatefulWidget {
 }
 
 class submit extends State<_submit> {
+  bool _value = false;
+  static const platform = const MethodChannel("razorpay_flutter");
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout() async {
+    var options = {
+      'key': 'rzp_test_5Bj5mq7OeZif36',
+      'amount': 2000 * 10,
+      'name': 'STET Exam Fee',
+      'description': 'Exam Registration Fee',
+      'prefill': {'contact': l[10], 'email': l[11]},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    setState(() {
+      _value = !_value;
+    });
+    Fluttertoast.showToast(
+        msg: "SUCCESS: " + response.paymentId, toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "ERROR: " + response.code.toString() + " - " + response.message,
+        toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET: " + response.walletName,
+        toastLength: Toast.LENGTH_SHORT);
+  }
+
+  Razorpay _razorpay;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -614,6 +673,7 @@ class submit extends State<_submit> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              SizedBox(height: 50),
               Align(
                 alignment: Alignment.center,
                 child: Image.asset(
@@ -709,7 +769,7 @@ class submit extends State<_submit> {
                 padding: const EdgeInsets.all(30.0),
                 child: Row(
                   children: <Widget>[
-                    RaisedButton(
+                    OutlineButton(
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -721,9 +781,27 @@ class submit extends State<_submit> {
                         child: Text("Edit",
                             style: TextStyle(color: Colors.black))),
                     SizedBox(width: 30),
+                    OutlineButton(
+                        onPressed: () {
+                          openCheckout();
+                          if (c == 1) {
+                            setState(() {
+                              _value = !_value;
+                            });
+                          }
+                        },
+                        color: Colors.white,
+                        child: Text("Payment Status",
+                            style: TextStyle(color: Colors.black))),
+                    SizedBox(width: 5),
+                    Visibility(
+                      child: Icon(Icons.check_box_rounded),
+                      visible: _value,
+                    ),
                   ],
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height / 1),
             ],
           ),
         ),
