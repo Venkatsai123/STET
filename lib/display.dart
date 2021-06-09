@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'personal.dart';
@@ -12,44 +14,45 @@ class DetailsPage extends StatefulWidget {
 List l;
 int c = 0;
 List l1 = [
-    "First Name",
-    "Middle Name",
-    "Sur Name",
-    "Gender",
-    "Caste",
-    "Aadhar Number",
-    "Date of Birth",
-    "Father Name",
-    "Mother Name",
-    "Address",
-    "Mobile Number",
-    "EMail",
-    "Role",
-    "Subject",
-    "Name of the School",
-    "Xth Percentage",
-    "Xth Passing Year",
-    "Name of the College",
-    "XIIth Percentage",
-    "XIIth Passing Year",
-    "Name of the College/University",
-    "Graduation Percentage",
-    "Graduation Passing Year",
-    "Name of the College/University",
-    "Post Graduation Percentage",
-    "Post Graduation Passing Year",
-  ];
-
+  "First Name",
+  "Middle Name",
+  "Sur Name",
+  "Gender",
+  "Caste",
+  "Aadhar Number",
+  "Date of Birth",
+  "Father Name",
+  "Mother Name",
+  "Address",
+  "Mobile Number",
+  "EMail",
+  "Role",
+  "Subject",
+  "Name of the School",
+  "Xth Percentage",
+  "Xth Passing Year",
+  "Name of the College",
+  "XIIth Percentage",
+  "XIIth Passing Year",
+  "Name of the College/University",
+  "Graduation Percentage",
+  "Graduation Passing Year",
+  "Name of the College/University",
+  "Post Graduation Percentage",
+  "Post Graduation Passing Year",
+];
 
 class _DetailsPage extends State<DetailsPage> {
   @override
   String s3 = "";
-  
+
   String s = "hello";
   Widget build(BuildContext context) {
     setState(() {
       l = widget.text;
     });
+    var users = FirebaseFirestore.instance.collection("stet");
+    var cu = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -383,7 +386,7 @@ class _DetailsPage extends State<DetailsPage> {
                 padding: const EdgeInsets.all(30.0),
                 child: Row(
                   children: <Widget>[
-                    RaisedButton(
+                    OutlinedButton(
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -391,22 +394,32 @@ class _DetailsPage extends State<DetailsPage> {
                                 builder: (context) => _edits(),
                               ));
                         },
-                        color: Colors.white,
                         child: Text("Edit",
                             style: TextStyle(color: Colors.black))),
                     SizedBox(width: 30),
-                    RaisedButton(
+                    OutlinedButton(
                         onPressed: () {
                           setState(() {
                             c = c + 1;
                           });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => _submit(),
-                              ));
+
+                          Map<String, String> dts = new Map();
+
+                          dts.forEach((l, l1) {
+                            dts.addAll({l: l1});
+                          });
+
+                          users
+                              .doc(cu.uid.toString())
+                              .set(dts)
+                              .then((value) => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => _submit(),
+                                        ))
+                                  });
                         },
-                        color: Colors.white,
                         child: Text("Submit",
                             style: TextStyle(color: Colors.black))),
                   ],
@@ -581,10 +594,10 @@ class submit extends State<_submit> {
           icon: Icon(Icons.logout, color: Colors.white),
           onPressed: () {
             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => login_screen(),
-                              ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => login_screen(),
+                ));
           },
         ),
       ),
