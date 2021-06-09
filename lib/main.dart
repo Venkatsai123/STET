@@ -1,6 +1,9 @@
 import 'dart:async';
 // import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:data_tables/data_tables.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +13,9 @@ import 'education.dart';
 import 'personal.dart';
 import 'display.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -41,8 +46,15 @@ class _flash_screenstate extends State<splash_screen> {
     super.initState();
     Timer(
         Duration(milliseconds: 3000),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => login_screen())));
+        () => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (BuildContext context) {
+              var cu = FirebaseAuth.instance.currentUser;
+              if (cu.uid != null) {
+                return login_screen();
+              } else {
+                return dis();
+              }
+            })));
   }
 
   Widget build(BuildContext context) => Scaffold(
@@ -110,6 +122,9 @@ class login_screenstate extends State<login_screen> {
   }
 
   Widget Login(BuildContext context) {
+    TextEditingController email = new TextEditingController();
+    TextEditingController password = new TextEditingController();
+    var auth = FirebaseAuth.instance;
     return Padding(
       padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15),
       child: Column(
@@ -125,6 +140,7 @@ class login_screenstate extends State<login_screen> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      controller: email,
                       decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.email,
@@ -141,6 +157,7 @@ class login_screenstate extends State<login_screen> {
                     ),
                     Divider(color: Colors.grey, height: 8),
                     TextField(
+                      controller: password,
                       obscureText: true,
                       decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -193,6 +210,18 @@ class login_screenstate extends State<login_screen> {
                           MaterialPageRoute(
                             builder: (context) => dis(),
                           ));
+                      auth
+                          .signInWithEmailAndPassword(
+                              email: email.text, password: password.text)
+                          .then((value) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => dis(),
+                            ));
+                      }).catchError((e) {
+                        print(e.message);
+                      });
                     }),
               ),
             ),
@@ -214,6 +243,11 @@ class login_screenstate extends State<login_screen> {
   }
 
   Widget SignUp(BuildContext context) {
+    TextEditingController email = new TextEditingController();
+    TextEditingController password = new TextEditingController();
+    TextEditingController cpassword = new TextEditingController();
+
+    var auth = FirebaseAuth.instance;
     return Padding(
       padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15),
       child: SingleChildScrollView(
@@ -235,6 +269,7 @@ class login_screenstate extends State<login_screen> {
                         child: Column(
                           children: <Widget>[
                             TextField(
+                              controller: email,
                               decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.email,
@@ -251,6 +286,7 @@ class login_screenstate extends State<login_screen> {
                             ),
                             Divider(color: Colors.grey, height: 8),
                             TextField(
+                              controller: password,
                               obscureText: true,
                               decoration: InputDecoration(
                                   prefixIcon: Icon(
@@ -268,6 +304,7 @@ class login_screenstate extends State<login_screen> {
                             ),
                             Divider(color: Colors.grey, height: 8),
                             TextField(
+                              controller: cpassword,
                               obscureText: true,
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
@@ -298,15 +335,20 @@ class login_screenstate extends State<login_screen> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
-                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          print("insignup");
 
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      select_screen()));
+                          auth
+                              .createUserWithEmailAndPassword(
+                                  email: email.text, password: password.text)
+                              .then((value) => {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                select_screen()))
+                                  })
+                              .catchError((e) {
+                            print(e.message);
+                          });
                         },
                         child: Expanded(
                           child: Container(
@@ -700,68 +742,78 @@ class dis extends StatefulWidget {
 }
 
 class _dis extends State<dis> {
+  getData(String uid) {
+    var users = FirebaseFirestore.instance.collection("stet");
+    users.doc(uid).get().then((value) {
+      return {
+        "username": value["First Name"],
+      };
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.logout, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => login_screen(),
-                ));
-          },
-        ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [Colors.cyan[600], Colors.black26],
-              begin: FractionalOffset.topLeft,
-              end: FractionalOffset.bottomRight,
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/icon.png',
-                  width: 150,
+    var cu = FirebaseAuth.instance.currentUser;
+    var auth = FirebaseAuth.instance;
+    return FutureBuilder(
+        future: getData(cu.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var kvp = snapshot.data;
+            print(kvp);
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: IconButton(
+                  icon: Icon(Icons.logout, color: Colors.white),
+                  onPressed: () {
+                    auth
+                        .signOut()
+                        .then((value) => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => login_screen(),
+                                  ))
+                            })
+                        .catchError((e) {
+                      print(e.message);
+                    });
+                  },
                 ),
               ),
-              SizedBox(height: 30),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: null,
-                  icon: Icon(Icons.account_circle, color: Colors.black),
-                  iconSize: 150,
+              extendBodyBehindAppBar: true,
+              body: Container(
+                decoration: new BoxDecoration(
+                  gradient: new LinearGradient(
+                      colors: [Colors.cyan[600], Colors.black26],
+                      begin: FractionalOffset.topLeft,
+                      end: FractionalOffset.bottomRight,
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
                 ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: DataTable(
-                  columns: const <DataColumn>[
-                    DataColumn(
-                      label: Text(
-                        '',
-                        style: TextStyle(fontStyle: FontStyle.italic),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          'assets/images/icon.png',
+                          width: 150,
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "",
-                        style: TextStyle(fontStyle: FontStyle.italic),
+                      SizedBox(height: 30),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: null,
+                          icon: Icon(Icons.account_circle, color: Colors.black),
+                          iconSize: 150,
+                        ),
                       ),
+
                     ),
                   ],
                   rows: const <DataRow>[
@@ -1197,11 +1249,10 @@ class submit extends State<_submit> {
                   ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 1),
-            ],
-          ),
-        ),
-      ),
-    );
+            );
+          } else {
+            return Scaffold(body: CircularProgressIndicator());
+          }
+        });
   }
 }
