@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:data_tables/data_tables.dart';
@@ -785,17 +785,17 @@ class _dis extends State<dis> {
                 padding: const EdgeInsets.all(30.0),
                 child: Row(
                   children: <Widget>[
-                    RaisedButton(
-                        onPressed: (){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => _edits(),
-                              ));
-                        },
-                        color: Colors.white,
-                        child: Text("Edit",
-                            style: TextStyle(color: Colors.black))),
+                    // RaisedButton(
+                    //     onPressed: (){
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) => _edits(),
+                    //           ));
+                    //     },
+                    //     color: Colors.white,
+                    //     child: Text("Edit",
+                    //         style: TextStyle(color: Colors.black))),
                     SizedBox(width: 30),
                   ],
                 ),
