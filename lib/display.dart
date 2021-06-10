@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'afterSignup.dart';
 import 'main.dart';
 import 'personal.dart';
 import 'education.dart';
@@ -27,6 +28,8 @@ List l1 = [
   "Father Name",
   "Mother Name",
   "Address",
+  "State",
+  "Pincode",
   "Mobile Number",
   "EMail",
   "Role",
@@ -40,7 +43,7 @@ List l1 = [
   "Name of the College/University",
   "Graduation Percentage",
   "Graduation Passing Year",
-  "Name of the College/University",
+  "Name of the University",
   "Post Graduation Percentage",
   "Post Graduation Passing Year",
 ];
@@ -404,14 +407,17 @@ class _DetailsPage extends State<DetailsPage> {
                         onPressed: () {
                           setState(() {
                             c = c + 1;
+                            print(l);
+                            print(l.length);
+                            print(l1.length);
                           });
-
+                          List l2 = l1;
+                          List l3 = l;
                           Map<String, String> dts = new Map();
-
-                          dts.forEach((l, l1) {
-                            dts.addAll({l: l1});
-                          });
-
+                          for (var i = 0; i < 28; i++) {
+                            dts[l1[i]] = l[i];
+                          }
+                          print(dts);
                           users
                               .doc(cu.uid.toString())
                               .set(dts)
@@ -419,7 +425,7 @@ class _DetailsPage extends State<DetailsPage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => _submit(),
+                                          builder: (context) => AfterSubmit(),
                                         ))
                                   });
                         },
@@ -579,8 +585,6 @@ class edits extends State<_edits> {
     );
   }
 }
-
-List l4 = ["hello", "hai"];
 
 class _submit extends StatefulWidget {
   submit createState() => submit();

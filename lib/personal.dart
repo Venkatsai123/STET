@@ -131,7 +131,7 @@ class _personal extends State<Personal> {
                 "#" +
                 mn.text +
                 "#" +
-                (ta.text + "," + state1 + "-" + pi.text) +
+                (ta.text + "#" + state1 + "#" + pi.text) +
                 "#" +
                 ph.text +
                 "#" +
