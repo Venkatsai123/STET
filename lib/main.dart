@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:data_tables/data_tables.dart';
 import 'package:flutter_application_1/afterSignup.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'education.dart';
 import 'personal.dart';
 import 'display.dart';
@@ -15,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseAuth auth = FirebaseAuth.instance;
-  auth.setPersistence(Persistence.SESSION);
+
   runApp(MyApp());
 }
 
@@ -88,6 +89,22 @@ class login_screen extends StatefulWidget {
 class login_screenstate extends State<login_screen> {
   List<Color> colors = [Colors.cyan[600], Colors.black26];
   int _index = 0;
+  TextEditingController email = new TextEditingController();
+  TextEditingController password = new TextEditingController();
+  TextEditingController email1 = new TextEditingController();
+  TextEditingController password1 = new TextEditingController();
+  TextEditingController cpassword = new TextEditingController();
+  final _formKey1 = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    email1.dispose();
+    password1.dispose();
+    cpassword.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,256 +143,277 @@ class login_screenstate extends State<login_screen> {
   }
 
   Widget Login(BuildContext context) {
-    TextEditingController email = new TextEditingController();
-    TextEditingController password = new TextEditingController();
     var auth = FirebaseAuth.instance;
     return Padding(
       padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15),
-      child: Column(
-        children: <Widget>[
-          Stack(alignment: Alignment.bottomCenter, children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height / 3.5,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10.0, left: 15, right: 15, bottom: 20),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      controller: email,
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.grey,
-                          ),
-                          labelText: "Enter Your Email",
-                          labelStyle: TextStyle(color: Colors.black87),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent))),
-                    ),
-                    Divider(color: Colors.grey, height: 8),
-                    TextField(
-                      controller: password,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          ),
-                          labelText: "Password",
-                          labelStyle: TextStyle(color: Colors.black87),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent))),
-                    ),
-                    Divider(
-                      color: Colors.transparent,
-                      height: 20,
-                    )
-                  ],
+      child: Form(
+        key: _formKey1,
+        child: Column(
+          children: <Widget>[
+            Stack(alignment: Alignment.bottomCenter, children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height / 3.5,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, left: 15, right: 15, bottom: 20),
+                  child: Column(
+                    children: <Widget>[
+                      TextField(
+                        controller: email,
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
+                            labelText: "Enter Your Email",
+                            labelStyle: TextStyle(color: Colors.black87),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))),
+                      ),
+                      Divider(color: Colors.grey, height: 8),
+                      TextField(
+                        controller: password,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                            labelText: "Password",
+                            labelStyle: TextStyle(color: Colors.black87),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent))),
+                      ),
+                      Divider(
+                        color: Colors.transparent,
+                        height: 20,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 130,
-              child: Center(
-                child: GestureDetector(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 100,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: colors,
-                          ),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Center(
-                            child: Text(
-                          "LOGIN",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        )),
+              Positioned(
+                top: 130,
+                child: Center(
+                  child: GestureDetector(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: colors,
+                            ),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Center(
+                              child: Text(
+                            "LOGIN",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          )),
+                        ),
                       ),
-                    ),
-                    onTap: () {
-                      auth
-                          .signInWithEmailAndPassword(
-                              email: email.text, password: password.text)
-                          .then((value) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AfterSubmit(),
-                            ));
-                      }).catchError((e) {
-                        print(e.message);
-                      });
-                    }),
+                      onTap: () {
+                        if (_formKey1.currentState.validate()) {
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
+                          auth
+                              .signInWithEmailAndPassword(
+                                  email: email.text, password: password.text)
+                              .then((value) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AfterSubmit(),
+                                ));
+                          }).catchError((e) {
+                            Fluttertoast.showToast(
+                                msg: "Invalid Username or Password");
+                            login_screen();
+                          });
+                        }
+                      }),
+                ),
+              ),
+            ]),
+            Padding(
+              padding: const EdgeInsets.only(top: 45.0),
+              child: GestureDetector(
+                child: Center(
+                    child: Text(
+                  "Forget Password?",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+                onTap: () {},
               ),
             ),
-          ]),
-          Padding(
-            padding: const EdgeInsets.only(top: 45.0),
-            child: GestureDetector(
-              child: Center(
-                  child: Text(
-                "Forget Password?",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
-              onTap: () {},
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget SignUp(BuildContext context) {
-    TextEditingController email = new TextEditingController();
-    TextEditingController password = new TextEditingController();
-    TextEditingController cpassword = new TextEditingController();
-
     var auth = FirebaseAuth.instance;
     return Padding(
       padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15),
       child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Stack(
-                overflow: Overflow.visible,
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height / 2.5,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10.0, left: 15, right: 15, bottom: 20),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            TextField(
-                              controller: email,
-                              decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.email,
-                                    color: Colors.grey,
-                                  ),
-                                  labelText: "Enter Your Email",
-                                  labelStyle: TextStyle(color: Colors.black87),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent))),
-                            ),
-                            Divider(color: Colors.grey, height: 8),
-                            TextField(
-                              controller: password,
-                              obscureText: true,
-                              decoration: InputDecoration(
+        child: Form(
+          key: _formKey2,
+          child: Column(
+            children: <Widget>[
+              Stack(
+                  overflow: Overflow.visible,
+                  alignment: Alignment.bottomCenter,
+                  children: <Widget>[
+                    Container(
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, left: 15, right: 15, bottom: 20),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              TextField(
+                                controller: email1,
+                                decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                      color: Colors.grey,
+                                    ),
+                                    labelText: "Enter Your Email",
+                                    labelStyle:
+                                        TextStyle(color: Colors.black87),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent))),
+                              ),
+                              Divider(color: Colors.grey, height: 8),
+                              TextField(
+                                controller: password1,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.lock,
+                                      color: Colors.grey,
+                                    ),
+                                    labelText: "Password",
+                                    labelStyle:
+                                        TextStyle(color: Colors.black87),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent))),
+                              ),
+                              Divider(color: Colors.grey, height: 8),
+                              TextField(
+                                controller: cpassword,
+                                obscureText: true,
+                                decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.lock,
                                     color: Colors.grey,
                                   ),
-                                  labelText: "Password",
+                                  labelText: "Re - Enter Password",
                                   labelStyle: TextStyle(color: Colors.black87),
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                           color: Colors.transparent)),
                                   focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.transparent))),
-                            ),
-                            Divider(color: Colors.grey, height: 8),
-                            TextField(
-                              controller: cpassword,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: Colors.grey,
+                                          color: Colors.transparent)),
                                 ),
-                                labelText: "Re - Enter Password",
-                                labelStyle: TextStyle(color: Colors.black87),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
                               ),
-                            ),
-                            Divider(
-                              color: Colors.transparent,
-                              height: 20,
-                            )
-                          ],
+                              Divider(
+                                color: Colors.transparent,
+                                height: 20,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 190,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          print("insignup");
+                    Positioned(
+                      top: 190,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            print("insignup");
+                            if (_formKey2.currentState.validate()) {
+                              FocusScopeNode currentFocus = FocusScope.of(context);
 
-                          auth
-                              .createUserWithEmailAndPassword(
-                                  email: email.text, password: password.text)
-                              .then((value) => {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                select_screen()))
-                                  })
-                              .catchError((e) {
-                            print(e.message);
-                          });
-                        },
-                        child: Expanded(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width - 100,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: colors,
-                                ),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Center(
-                                  child: Text(
-                                "SIGNUP",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              )),
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
+
+                              auth
+                                  .createUserWithEmailAndPassword(
+                                      email: email1.text,
+                                      password: password1.text)
+                                  .then((value) => {
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        select_screen()))
+                                      })
+                                  .catchError((e) {
+                                print(e.message);
+                              });
+                            }
+                          },
+                          child: Expanded(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width - 100,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: colors,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                child: Center(
+                                    child: Text(
+                                  "SIGNUP",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                )),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ]),
-          ],
+                  ]),
+            ],
+          ),
         ),
       ),
     );

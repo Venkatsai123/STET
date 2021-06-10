@@ -188,7 +188,7 @@ class submit extends State<AfterSubmit> {
                               DataCell(Text('Gender',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 15))),
-                              DataCell(Text("male",
+                              DataCell(Text(gotd["Gender"],
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 15))),
                             ],
@@ -198,7 +198,7 @@ class submit extends State<AfterSubmit> {
                               DataCell(Text('Parent details',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 15))),
-                              DataCell(Text("l[7]",
+                              DataCell(Text(gotd["Father Name"],
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 15))),
                             ],
@@ -206,7 +206,7 @@ class submit extends State<AfterSubmit> {
                           DataRow(
                             cells: <DataCell>[
                               DataCell(Text('Date Of Birth')),
-                              DataCell(Text("l[6]",
+                              DataCell(Text(gotd["Date of Birth"],
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 15))),
                             ],
@@ -214,7 +214,13 @@ class submit extends State<AfterSubmit> {
                           DataRow(
                             cells: <DataCell>[
                               DataCell(Text('Role')),
-                              DataCell(Text('Graduate Teacher')),
+                              DataCell(Text(gotd["Role"],style: TextStyle(color: Colors.white, fontSize:15))),
+                            ],
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text('Payment Status')),
+                              DataCell(Text(gotd["PaymentStatus"],style: TextStyle(color: Colors.white, fontSize:15))),
                             ],
                           ),
                         ],
