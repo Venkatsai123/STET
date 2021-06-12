@@ -11,6 +11,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'education.dart';
 import 'personal.dart';
 import 'display.dart';
+import 'role.dart';
+import 'subject.dart';
+import 'editspage.dart';
+import 'payment.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -207,48 +211,51 @@ class login_screenstate extends State<login_screen> {
                 top: 130,
                 child: Center(
                   child: GestureDetector(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 100,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: colors,
-                            ),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Center(
-                              child: Text(
-                            "LOGIN",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          )),
-                        ),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: colors,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Center(
+                            child: Text(
+                          "LOGIN",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        )),
                       ),
-                      onTap: () {
-                        if (_formKey1.currentState.validate()) {
-                          FocusScopeNode currentFocus = FocusScope.of(context);
+                    ),
+                    onTap: () {
+                      if (_formKey1.currentState.validate()) {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
 
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                          auth
-                              .signInWithEmailAndPassword(
-                                  email: email.text, password: password.text)
-                              .then((value) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AfterSubmit(),
-                                ));
-                          }).catchError((e) {
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+                        auth
+                            .signInWithEmailAndPassword(
+                                email: email.text, password: password.text)
+                            .then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AfterSubmit(),
+                              ));
+                        }).catchError(
+                          (e) {
                             Fluttertoast.showToast(
                                 msg: "Invalid Username or Password");
                             login_screen();
-                          });
-                        }
-                      }),
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             ]),
@@ -364,11 +371,12 @@ class login_screenstate extends State<login_screen> {
                           onTap: () {
                             print("insignup");
                             if (_formKey2.currentState.validate()) {
-                              FocusScopeNode currentFocus = FocusScope.of(context);
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
 
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
 
                               auth
                                   .createUserWithEmailAndPassword(
@@ -489,287 +497,3 @@ class login_screenstate extends State<login_screen> {
     );
   }
 }
-
-List l1;
-
-class select_screen extends StatefulWidget {
-  @override
-  _select_screenstate createState() => _select_screenstate();
-}
-
-class _select_screenstate extends State<select_screen> {
-  @override
-  final double _borderRadius = 24.0;
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => login_screen(),
-                ));
-          },
-        ),
-        title: Center(
-          child: Text("Post Selection"),
-        ),
-        backgroundColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      //hit Ctrl+space in intellij to know what are the options you can use in flutter widgets
-      body: new Container(
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [Colors.cyan[600], Colors.black26],
-              begin: FractionalOffset.topLeft,
-              end: FractionalOffset.bottomRight,
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        padding: new EdgeInsets.all(32.0),
-        child: new Center(
-          child: new Column(
-            children: <Widget>[
-              SizedBox(height: 150),
-              new Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            CategoriesScreen(text: 'Primary teacher')));
-                  },
-                  child: new Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                    padding: new EdgeInsets.all(32.0),
-                    child: new Column(
-                      children: <Widget>[
-                        new Text(
-                          'Applying for Primary Teacher ',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900),
-                        ),
-                        new Text(
-                          'Tap here',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              new Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            CategoriesScreen(text: 'Graduate teacher-Arts')));
-                  },
-                  child: new Container(
-                    padding: new EdgeInsets.all(32.0),
-                    child: new Column(
-                      children: <Widget>[
-                        new Text(
-                          'Applying for Graduate Teacher - Arts ',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900),
-                        ),
-                        new Text(
-                          'Tap here',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w900),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              new Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => CategoriesScreen(
-                            text: 'Graduate Teacher-Science')));
-                  },
-                  child: new Container(
-                    padding: new EdgeInsets.all(32.0),
-                    child: new Column(
-                      children: <Widget>[
-                        new Text(
-                          'Applying for Graduate Teacher - Science ',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900),
-                        ),
-                        new Text('Tap here')
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CategoriesScreen extends StatefulWidget {
-  final String text;
-
-  CategoriesScreen({Key key, this.text}) : super(key: key);
-
-  _CategoriesScreen createState() => new _CategoriesScreen();
-}
-
-class _CategoriesScreen extends State<CategoriesScreen> {
-  @override
-  String s1 = "";
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black87,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Center(
-          child: Text("Subject Selection"),
-        ),
-      ),
-      floatingActionButton: Visibility(
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            if (s.length != 0) {
-              s1 = s1 + widget.text + "#" + s + "#";
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(text: s1),
-                ),
-              );
-            } else {
-              return showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Alert Message"),
-                    // Retrieve the text which the user has entered by
-                    // using the TextEditingController.
-                    content: Text("No Language is Selected"),
-                    actions: <Widget>[
-                      new FlatButton(
-                        child: new Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    ],
-                  );
-                },
-              );
-            }
-          },
-          icon: const Icon(Icons.arrow_forward),
-          label: const Text("Next"),
-        ),
-      ),
-      body: GridView.count(
-        padding: const EdgeInsets.all(12),
-        crossAxisCount: 2,
-        children: DUMMY_CATEGORIES
-            .map(
-              (categoryItem) =>
-                  CategoryItem(categoryItem.title, categoryItem.color),
-            )
-            .toList(),
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 25,
-      ),
-    );
-  }
-}
-
-class CategoryItem extends StatelessWidget {
-  final String title;
-  final Color color;
-  CategoryItem(this.title, this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    return new InkWell(
-      onTap: () {
-        s = title;
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text('$title')));
-      },
-      child: Container(
-        height: 200,
-        width: 2000,
-        padding: const EdgeInsets.all(7),
-        child: Center(
-          child: Text(title, style: TextStyle(fontSize: 15)),
-        ),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [color.withOpacity(0.7), color],
-              begin: Alignment.topLeft,
-              //end: Alignment.bottomRight
-            ),
-            borderRadius: BorderRadius.circular(15)),
-      ),
-    );
-  }
-}
-
-class Category {
-  final String id;
-  final String title;
-  final Color color;
-  const Category({this.id, this.title, this.color = Colors.orange});
-}
-
-const DUMMY_CATEGORIES = const [
-  Category(id: "1", title: "Telugu", color: Colors.green),
-  Category(id: "2", title: "English", color: Colors.red),
-  Category(id: "3", title: "Hindi", color: Colors.lightBlue),
-  Category(id: "4", title: "Science", color: Colors.white),
-  Category(id: "5", title: "Social", color: Colors.blue),
-  Category(id: "6", title: "Maths", color: Colors.lightGreenAccent),
-  Category(id: "7", title: "Sikkim", color: Colors.blueAccent),
-  Category(id: "8", title: "Chemistry", color: Colors.tealAccent),
-  Category(id: "9", title: "Arts", color: Colors.indigoAccent)
-];
