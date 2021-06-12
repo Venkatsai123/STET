@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'personal.dart';
 import 'display.dart';
+import 'subject.dart';
 
 class ed1 {
   String name;
@@ -260,124 +261,126 @@ class _MyDetailPageState extends State<MyDetailPage> {
         ),
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(child:Column(
-            children: <Widget>[
-              SizedBox(height: 100),
-              Center(
-                child: IconButton(
-                  icon: Icon(Icons.school, color: Colors.white),
-                  iconSize: 100.0,
-                  onPressed: null,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 100),
+                Center(
+                  child: IconButton(
+                    icon: Icon(Icons.school, color: Colors.white),
+                    iconSize: 100.0,
+                    onPressed: null,
+                  ),
                 ),
-              ),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z. ]+"))
-                  ],
-                  controller: _school,
-                  validator: (value) {
-                    if ((!value.isEmpty) && value.length < 6) {
-                      return "Enter Correct " + superHero.cla;
-                    } else if (value.isEmpty) {
-                      return "Enter Correct " + superHero.cla;
-                    }
-                    return null;
-                  },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    labelText: superHero.cla,
-                    hintText: superHero.cla,
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: new BorderSide(color: Colors.white),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp("[a-zA-Z. ]+"))
+                    ],
+                    controller: _school,
+                    validator: (value) {
+                      if ((!value.isEmpty) && value.length < 6) {
+                        return "Enter Correct " + superHero.cla;
+                      } else if (value.isEmpty) {
+                        return "Enter Correct " + superHero.cla;
+                      }
+                      return null;
+                    },
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: superHero.cla,
+                      hintText: superHero.cla,
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: new OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: new BorderSide(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _percent,
-                  maxLength: 4,
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return "Enter Correct " + superHero.per;
-                    } else {
-                      if (value.length == 2) {
-                        var myInt = int.parse(value);
-                        assert(myInt is int);
-                        if (myInt < 50 && !(value.isEmpty)) {
-                          return "Enter Correct " + superHero.per;
-                        }
+                SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _percent,
+                    maxLength: 4,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return "Enter Correct " + superHero.per;
                       } else {
-                        var myInt = double.parse(value);
-                        assert(myInt is double);
-                        if (myInt < 50.0 && !(value.isEmpty)) {
-                          return "Enter Correct " + superHero.per;
+                        if (value.length == 2) {
+                          var myInt = int.parse(value);
+                          assert(myInt is int);
+                          if (myInt < 50 && !(value.isEmpty)) {
+                            return "Enter Correct " + superHero.per;
+                          }
+                        } else {
+                          var myInt = double.parse(value);
+                          assert(myInt is double);
+                          if (myInt < 50.0 && !(value.isEmpty)) {
+                            return "Enter Correct " + superHero.per;
+                          }
                         }
                       }
-                    }
-                    return null;
-                  },
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[0-9.]+"))
-                  ],
-                  style: TextStyle(color: Colors.white),
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: superHero.per,
-                    hintText: superHero.per,
-                    labelStyle: TextStyle(color: Colors.white),
-                    errorStyle: TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
-                    ),
-                    enabledBorder: new OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: new BorderSide(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _yearof,
-                  maxLength: 4,
-                  validator: (String value) {
-                    if ((!value.isEmpty) && value.length != 4) {
-                      return "Enter Correct " + superHero.yearp;
-                    } else if (value.isEmpty) {
-                      return "Enter Correct " + superHero.yearp;
-                    }
-                    return null;
-                  },
-                  style: TextStyle(color: Colors.white),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[0-9]+"))
-                  ],
-                  decoration: InputDecoration(
-                    labelText: superHero.yearp,
-                    hintText: superHero.yearp,
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: new BorderSide(color: Colors.white),
+                      return null;
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp("[0-9.]+"))
+                    ],
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      labelText: superHero.per,
+                      hintText: superHero.per,
+                      labelStyle: TextStyle(color: Colors.white),
+                      errorStyle: TextStyle(
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
+                      enabledBorder: new OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: new BorderSide(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height:MediaQuery.of(context).size.height/1),
-            ],
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _yearof,
+                    maxLength: 4,
+                    validator: (String value) {
+                      if ((!value.isEmpty) && value.length != 4) {
+                        return "Enter Correct " + superHero.yearp;
+                      } else if (value.isEmpty) {
+                        return "Enter Correct " + superHero.yearp;
+                      }
+                      return null;
+                    },
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]+"))
+                    ],
+                    decoration: InputDecoration(
+                      labelText: superHero.yearp,
+                      hintText: superHero.yearp,
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: new OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: new BorderSide(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 1),
+              ],
+            ),
           ),
-        ),),
+        ),
       ),
     );
   }

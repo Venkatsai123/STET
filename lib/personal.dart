@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'display.dart';
+import 'payment.dart';
+import 'education.dart';
 
 class Personal extends StatefulWidget {
   final String text;
@@ -131,7 +133,7 @@ class _personal extends State<Personal> {
                 "#" +
                 mn.text +
                 "#" +
-                (ta.text + "," + state1 + "-" + pi.text) +
+                (ta.text + "#" + state1 + "#" + pi.text) +
                 "#" +
                 ph.text +
                 "#" +
@@ -170,8 +172,8 @@ class _personal extends State<Personal> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailsPage(
-                        text: text,
+                      builder: (context) => Payment(
+                        Text1: text,
                       ),
                     ));
               }
