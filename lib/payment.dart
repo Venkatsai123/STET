@@ -5,7 +5,6 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'display.dart';
 
-
 class Payment extends StatefulWidget {
   final List Text1;
 
@@ -40,7 +39,7 @@ class _payment extends State<Payment> {
       'amount': 800 * 100,
       'name': 'STET Exam Fee',
       'description': 'Exam Registration Fee',
-      'prefill': {'contact': l[13], 'email': l[14]},
+      'prefill': {'contact': l[12], 'email': l[13]},
       'external': {
         'wallets': ['paytm']
       }
@@ -96,16 +95,16 @@ class _payment extends State<Payment> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if (valuefirst) {
+            
               setState(() {
-                l.add("Sucess");
+                l[28] = "Sucess";
               });
               Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => DetailsPage(text: l),
                   ));
-            }
+            
           },
           label: Text("Update")),
       extendBodyBehindAppBar: true,
@@ -151,22 +150,10 @@ class _payment extends State<Payment> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: <Widget>[
-                  Checkbox(
-                    checkColor: Colors.greenAccent,
-                    activeColor: Colors.red,
-                    value: this.valuefirst,
-                    onChanged: (bool value) {
-                      setState(() {
-                        this.valuefirst = value;
-                      });
-                    },
-                  ),
-                  AutoSizeText("Fee paid for the Registration for STET will not REFUND under any circumstances nd if any errors occurs in the payment of fees mail the issue in the payment for email test@razorpay.com ",style: TextStyle(fontSize: 15),
-                  maxLines: 4,
-                  ),
-                ],
+              child: AutoSizeText(
+                "* Fee paid for the Registration for STET will not REFUND under any circumstances nd if any errors occurs in the payment of fees mail the issue in the payment for email test@razorpay.com ",
+                minFontSize: 12,
+                maxLines: 4,
               ),
             ),
           ],

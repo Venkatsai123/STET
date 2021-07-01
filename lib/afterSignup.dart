@@ -17,16 +17,7 @@ class AfterSubmit extends StatefulWidget {
 }
 
 class submit extends State<AfterSubmit> {
-  Razorpay _razorpay;
-  bool _value = false;
-  static const platform = const MethodChannel("razorpay_flutter");
-  void initState() {
-    super.initState();
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-  }
+  
 
   getData(String uid) async {
     var d;
@@ -34,58 +25,6 @@ class submit extends State<AfterSubmit> {
     return await users.doc(uid).get();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _razorpay.clear();
-  }
-
-  void openCheckout() async {
-    var options = {
-      'key': 'rzp_test_5Bj5mq7OeZif36',
-      'amount': 2000 * 10,
-      'name': 'STET Exam Fee',
-      'description': 'Exam Registration Fee',
-      'prefill': {'contact': l[10], 'email': l[11]},
-      'external': {
-        'wallets': ['paytm']
-      }
-    };
-
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint('Error: e');
-    }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    setState(() {
-      _value = !_value;
-      FirebaseFirestore.instance
-          .collection("stet")
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .set({"PaymentStatus": "paid"});
-    });
-    Fluttertoast.showToast(
-        msg: "SUCCESS: " + response.paymentId, toastLength: Toast.LENGTH_SHORT);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(
-        msg: "ERROR: " + response.code.toString() + " - " + response.message,
-        toastLength: Toast.LENGTH_SHORT);
-    FirebaseFirestore.instance
-        .collection("stet")
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .set({"PaymentStatus": "notpaid"});
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: " + response.walletName,
-        toastLength: Toast.LENGTH_SHORT);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,22 +40,7 @@ class submit extends State<AfterSubmit> {
           print("in After SignUp Screen bro");
 
           return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: Icon(Icons.logout, color: Colors.white),
-                onPressed: () {
-                  auth.signOut().then((value) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => login_screen(),
-                        ));
-                  });
-                },
-              ),
-            ),
+          
             extendBodyBehindAppBar: true,
             body: Container(
               decoration: new BoxDecoration(
@@ -228,6 +152,16 @@ class submit extends State<AfterSubmit> {
                                       color: Colors.white, fontSize: 15))),
                             ],
                           ),
+                          DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text('Payemnt Status',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15))),
+                              DataCell(Text(gotd["Payment Status"],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15))),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -260,10 +194,7 @@ class submit extends State<AfterSubmit> {
                               child: Text("Logout",
                                   style: TextStyle(color: Colors.black))),
                           SizedBox(width: 5),
-                          Visibility(
-                            child: Icon(Icons.check_box_rounded),
-                            visible: _value,
-                          ),
+                          
                         ],
                       ),
                     ),

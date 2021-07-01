@@ -233,7 +233,6 @@ class login_screenstate extends State<login_screen> {
                     onTap: () {
                       if (_formKey1.currentState.validate()) {
                         FocusScopeNode currentFocus = FocusScope.of(context);
-
                         if (!currentFocus.hasPrimaryFocus) {
                           currentFocus.unfocus();
                         }

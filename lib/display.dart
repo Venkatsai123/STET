@@ -480,8 +480,7 @@ class _DetailsPage extends State<DetailsPage> {
                           for (var i = 0; i < 29; i++) {
                             dts[l1[i]] = l[i];
                           }
-                          dts["PaymentStatus"] = "None";
-                          print(dts);
+                          
                           users
                               .doc(cu.uid.toString())
                               .set(dts)
